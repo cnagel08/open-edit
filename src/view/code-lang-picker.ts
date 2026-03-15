@@ -28,6 +28,7 @@ export class CodeLangPicker {
   private targetPreEl: HTMLElement | null = null;
   private onOutside: ((e: MouseEvent) => void) | null = null;
   private onOutsideTimer: ReturnType<typeof setTimeout> | null = null;
+  private onScroll: (() => void) | null = null;
 
   constructor(editorEl: HTMLElement, editor: EditorInterface) {
     this.editorEl = editorEl;
@@ -136,6 +137,10 @@ export class CodeLangPicker {
       this.onOutsideTimer = null;
       if (this.onOutside) document.addEventListener('mousedown', this.onOutside, true);
     }, 0);
+
+    // Close on scroll
+    this.onScroll = (): void => { this.closePicker(); };
+    window.addEventListener('scroll', this.onScroll, { passive: true, capture: true });
   }
 
   private renderList(list: HTMLElement, query: string): void {
@@ -192,6 +197,10 @@ export class CodeLangPicker {
     if (this.onOutside) {
       document.removeEventListener('mousedown', this.onOutside, true);
       this.onOutside = null;
+    }
+    if (this.onScroll) {
+      window.removeEventListener('scroll', this.onScroll, true);
+      this.onScroll = null;
     }
     this.pickerEl?.remove();
     this.pickerEl = null;

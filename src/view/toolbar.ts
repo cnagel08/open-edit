@@ -169,6 +169,7 @@ export class Toolbar {
   private disabled = false;
   private locale: EditorLocale;
   private calloutPickerEl: HTMLElement | null = null;
+  private calloutPickerCleanup: (() => void) | null = null;
 
   constructor(
     el: HTMLElement,
@@ -341,9 +342,18 @@ export class Toolbar {
     };
     // Delay so this click doesn't immediately close the picker
     setTimeout(() => document.addEventListener('mousedown', onOutside, true), 0);
+
+    // Close on scroll
+    const onScroll = (): void => { this.closeCalloutPicker(); };
+    window.addEventListener('scroll', onScroll, { passive: true, capture: true });
+    this.calloutPickerCleanup = (): void => {
+      window.removeEventListener('scroll', onScroll, true);
+    };
   }
 
   private closeCalloutPicker(): void {
+    this.calloutPickerCleanup?.();
+    this.calloutPickerCleanup = null;
     this.calloutPickerEl?.remove();
     this.calloutPickerEl = null;
   }

@@ -39,6 +39,7 @@ export function createEmojiPlugin(): EditorPlugin {
   let editorRef: EditorInterface | null = null;
   let savedRange: Range | null = null;
   let locale: EditorLocale = en;
+  let scrollCleanup: (() => void) | null = null;
 
   function closePopup(): void {
     if (popup) {
@@ -46,6 +47,8 @@ export function createEmojiPlugin(): EditorPlugin {
       popup = null;
     }
     document.removeEventListener('click', onDocumentClick, true);
+    scrollCleanup?.();
+    scrollCleanup = null;
   }
 
   function onDocumentClick(e: MouseEvent): void {
@@ -161,6 +164,11 @@ export function createEmojiPlugin(): EditorPlugin {
     setTimeout(() => {
       document.addEventListener('click', onDocumentClick, true);
     }, 0);
+
+    // Close on scroll
+    const onScroll = (): void => { closePopup(); };
+    window.addEventListener('scroll', onScroll, { passive: true, capture: true });
+    scrollCleanup = (): void => { window.removeEventListener('scroll', onScroll, true); };
   }
 
   return {
