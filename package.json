@@ -41,7 +41,7 @@
   ],
   "scripts": {
     "dev": "vite build --watch",
-    "build": "vite build && tsc -p tsconfig.lib.json --emitDeclarationOnly",
+    "build": "vite build && vite build --mode umd && tsc -p tsconfig.lib.json --emitDeclarationOnly",
     "preview": "vite",
     "lint": "eslint . --ext .ts --max-warnings 0",
     "test": "vitest run --environment jsdom",

@@ -521,14 +521,19 @@ export function Editor({ onChange }: { onChange: (html: string) => void }) {
   const editorRef = useRef<EditorInterface | null>(null);
 
   useEffect(() => {
-    if (!ref.current) return;
+    if (!ref.current || editorRef.current) return;
     editorRef.current = OpenEdit.create(ref.current, { onChange });
-    return () => editorRef.current?.destroy();
+    return () => {
+      editorRef.current?.destroy();
+      editorRef.current = null;
+    };
   }, []);
 
   return <div ref={ref} />;
 }
 ```
+
+> **Note:** The guard `|| editorRef.current` prevents double-initialisation in React 18 Strict Mode, which intentionally mounts effects twice in development.
 
 ### Vue 3
 

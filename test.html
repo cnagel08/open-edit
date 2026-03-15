@@ -108,7 +108,7 @@
   <!-- UMD build — no Vite, no build step required -->
   <script src="dist/open-edit.umd.js"></script>
   <script>
-    const { OpenEdit } = window.OpenEdit ?? window;
+    const OpenEdit = window.OpenEdit;
 
     const INITIAL_HTML = `
 <h1>open-edit — The Modern WYSIWYG Editor</h1>
