@@ -72,9 +72,11 @@ function create(
 
 // ── Namespace export ──────────────────────────────────────────────────────────
 
+declare const __APP_VERSION__: string;
+
 export const OpenEdit = {
   create,
-  version: '0.1.0',
+  version: __APP_VERSION__,
   locales: { en, de },
   plugins: {
     highlight: createHighlightPlugin,
