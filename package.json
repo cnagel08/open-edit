@@ -1,0 +1,62 @@
+{
+  "name": "open-edit",
+  "version": "0.1.0",
+  "description": "Lightweight, embeddable WYSIWYG HTML editor. Zero dependencies, plugin system, clean HTML5 output.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/open-edit.cjs.js",
+  "module": "./dist/open-edit.esm.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/open-edit.esm.js",
+      "require": "./dist/open-edit.cjs.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cnagel08/open-edit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cnagel08/open-edit/issues"
+  },
+  "homepage": "https://github.com/cnagel08/open-edit#readme",
+  "keywords": [
+    "wysiwyg",
+    "editor",
+    "rich-text",
+    "html-editor",
+    "contenteditable",
+    "typescript",
+    "tinymce-alternative",
+    "ckeditor-alternative",
+    "embeddable",
+    "lightweight"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build && tsc -p tsconfig.lib.json --emitDeclarationOnly",
+    "preview": "vite",
+    "lint": "eslint . --ext .ts --max-warnings 0",
+    "test": "vitest run --environment jsdom",
+    "test:watch": "vitest --environment jsdom",
+    "licenses:summary": "npx license-checker --summary --development",
+    "licenses:full": "npx license-checker --csv --development > THIRD_PARTY_LICENSES.csv"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
+    "eslint": "^8.57.0",
+    "jsdom": "^28.1.0",
+    "typescript": "^5.5.0",
+    "vite": "^8.0.0",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.0"
+  }
+}
