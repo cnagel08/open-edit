@@ -3334,7 +3334,7 @@ function Et(e, t) {
 }
 var Dt = {
 	create: Et,
-	version: "0.1.0",
+	version: "0.1.2",
 	locales: {
 		en: W,
 		de: J
