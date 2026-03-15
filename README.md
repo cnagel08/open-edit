@@ -514,7 +514,8 @@ For dark mode, set `theme: 'dark'` or use `theme: 'auto'` to follow the OS prefe
 
 ```tsx
 import { useEffect, useRef } from 'react';
-import { OpenEdit, EditorInterface } from 'open-edit';
+import { OpenEdit } from 'open-edit';
+import type { EditorInterface } from 'open-edit';
 
 export function Editor({ onChange }: { onChange: (html: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -540,7 +541,8 @@ export function Editor({ onChange }: { onChange: (html: string) => void }) {
 ```vue
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import { OpenEdit, EditorInterface } from 'open-edit';
+import { OpenEdit } from 'open-edit';
+import type { EditorInterface } from 'open-edit';
 
 const container = ref<HTMLDivElement>();
 let editor: EditorInterface;
