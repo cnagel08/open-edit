@@ -17,6 +17,7 @@ export declare class Toolbar {
     private disabled;
     private locale;
     private calloutPickerEl;
+    private calloutPickerCleanup;
     constructor(el: HTMLElement, editor: EditorInterface, config?: ToolbarItemConfig[], toolbarItems?: string[], locale?: EditorLocale);
     private render;
     private renderItem;

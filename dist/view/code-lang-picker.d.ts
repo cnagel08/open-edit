@@ -8,6 +8,7 @@ export declare class CodeLangPicker {
     private targetPreEl;
     private onOutside;
     private onOutsideTimer;
+    private onScroll;
     constructor(editorEl: HTMLElement, editor: EditorInterface);
     private readonly onBadgeMousedown;
     private readonly onBadgeClick;

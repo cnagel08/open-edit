@@ -1274,6 +1274,7 @@ var Ae = [
 	disabled = !1;
 	locale;
 	calloutPickerEl = null;
+	calloutPickerCleanup = null;
 	constructor(e, t, n, r, i = W) {
 		this.el = e, this.editor = t, this.locale = i, n ? this.config = n : r ? this.config = Oe(r, i) : this.config = K(i), this.render();
 	}
@@ -1404,9 +1405,18 @@ var Ae = [
 			!t.contains(n.target) && n.target !== e && (this.closeCalloutPicker(), document.removeEventListener("mousedown", r, !0));
 		};
 		setTimeout(() => document.addEventListener("mousedown", r, !0), 0);
+		let i = () => {
+			this.closeCalloutPicker();
+		};
+		window.addEventListener("scroll", i, {
+			passive: !0,
+			capture: !0
+		}), this.calloutPickerCleanup = () => {
+			window.removeEventListener("scroll", i, !0);
+		};
 	}
 	closeCalloutPicker() {
-		this.calloutPickerEl?.remove(), this.calloutPickerEl = null;
+		this.calloutPickerCleanup?.(), this.calloutPickerCleanup = null, this.calloutPickerEl?.remove(), this.calloutPickerEl = null;
 	}
 	handleBlockTypeChange(e) {
 		switch (e) {
@@ -1730,6 +1740,7 @@ var Re = /* @__PURE__ */ "plain.bash.c.cpp.csharp.css.dockerfile.go.graphql.html
 	targetPreEl = null;
 	onOutside = null;
 	onOutsideTimer = null;
+	onScroll = null;
 	constructor(e, t) {
 		this.editorEl = e, this.editor = t, this.editorEl.addEventListener("mousedown", this.onBadgeMousedown, !0), this.editorEl.addEventListener("click", this.onBadgeClick, !0);
 	}
@@ -1775,7 +1786,12 @@ var Re = /* @__PURE__ */ "plain.bash.c.cpp.csharp.css.dockerfile.go.graphql.html
 			n.contains(e.target) || this.closePicker();
 		}, this.onOutsideTimer = setTimeout(() => {
 			this.onOutsideTimer = null, this.onOutside && document.addEventListener("mousedown", this.onOutside, !0);
-		}, 0);
+		}, 0), this.onScroll = () => {
+			this.closePicker();
+		}, window.addEventListener("scroll", this.onScroll, {
+			passive: !0,
+			capture: !0
+		});
 	}
 	renderList(e, t) {
 		this.filtered = t ? Re.filter((e) => e.includes(t)) : Re, e.innerHTML = "", this.filtered.forEach((t, n) => {
@@ -1804,7 +1820,7 @@ var Re = /* @__PURE__ */ "plain.bash.c.cpp.csharp.css.dockerfile.go.graphql.html
 		this.editor.chain().setBlock("code_block", { lang: r }).run();
 	}
 	closePicker() {
-		this.onOutsideTimer !== null && (clearTimeout(this.onOutsideTimer), this.onOutsideTimer = null), this.onOutside &&= (document.removeEventListener("mousedown", this.onOutside, !0), null), this.pickerEl?.remove(), this.pickerEl = null, this.targetPreEl = null, this.activeIndex = 0, this.filtered = [];
+		this.onOutsideTimer !== null && (clearTimeout(this.onOutsideTimer), this.onOutsideTimer = null), this.onOutside &&= (document.removeEventListener("mousedown", this.onOutside, !0), null), this.onScroll &&= (window.removeEventListener("scroll", this.onScroll, !0), null), this.pickerEl?.remove(), this.pickerEl = null, this.targetPreEl = null, this.activeIndex = 0, this.filtered = [];
 	}
 	destroy() {
 		this.closePicker(), this.editorEl.removeEventListener("mousedown", this.onBadgeMousedown, !0), this.editorEl.removeEventListener("click", this.onBadgeClick, !0);
@@ -2471,20 +2487,20 @@ function tt(e) {
 }
 var nt = "<svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 14s1.5 2 4 2 4-2 4-2\"/><line x1=\"9\" y1=\"9\" x2=\"9.01\" y2=\"9\"/><line x1=\"15\" y1=\"9\" x2=\"15.01\" y2=\"9\"/></svg>";
 function rt() {
-	let e = null, t = null, n = null, r = null, i = W;
-	function a() {
-		e &&= (e.remove(), null), document.removeEventListener("click", o, !0);
+	let e = null, t = null, n = null, r = null, i = W, a = null;
+	function o() {
+		e &&= (e.remove(), null), document.removeEventListener("click", s, !0), a?.(), a = null;
 	}
-	function o(n) {
+	function s(n) {
 		let r = n.target;
-		e && !e.contains(r) && !t?.contains(r) && a();
+		e && !e.contains(r) && !t?.contains(r) && o();
 	}
-	function s(e) {
+	function c(e) {
 		let t = window.getSelection();
-		r && t ? (t.removeAllRanges(), t.addRange(r)) : n && n.focus(), document.execCommand("insertText", !1, e), a(), n?.focus();
+		r && t ? (t.removeAllRanges(), t.addRange(r)) : n && n.focus(), document.execCommand("insertText", !1, e), o(), n?.focus();
 	}
-	function c(t) {
-		a(), e = document.createElement("div"), e.className = "oe-emoji-popup", Object.assign(e.style, {
+	function l(t) {
+		o(), e = document.createElement("div"), e.className = "oe-emoji-popup", Object.assign(e.style, {
 			position: "fixed",
 			zIndex: "99999",
 			background: "var(--oe-bg, #ffffff)",
@@ -2529,23 +2545,32 @@ function rt() {
 				}), t.addEventListener("mouseleave", () => {
 					t.style.background = "none";
 				}), t.addEventListener("mousedown", (t) => {
-					t.preventDefault(), s(e);
+					t.preventDefault(), c(e);
 				}), r.appendChild(t);
 			}
 			e.appendChild(r);
 		}
 		document.body.appendChild(e);
-		let n = t.getBoundingClientRect(), r = n.bottom + 4, c = n.left;
-		c + 300 > window.innerWidth - 8 && (c = window.innerWidth - 308), c < 8 && (c = 8), r + 260 > window.innerHeight - 8 && (r = n.top - 260 - 4), e.style.top = `${r}px`, e.style.left = `${c}px`, setTimeout(() => {
-			document.addEventListener("click", o, !0);
+		let n = t.getBoundingClientRect(), r = n.bottom + 4, l = n.left;
+		l + 300 > window.innerWidth - 8 && (l = window.innerWidth - 308), l < 8 && (l = 8), r + 260 > window.innerHeight - 8 && (r = n.top - 260 - 4), e.style.top = `${r}px`, e.style.left = `${l}px`, setTimeout(() => {
+			document.addEventListener("click", s, !0);
 		}, 0);
+		let u = () => {
+			o();
+		};
+		window.addEventListener("scroll", u, {
+			passive: !0,
+			capture: !0
+		}), a = () => {
+			window.removeEventListener("scroll", u, !0);
+		};
 	}
 	return {
 		name: "emoji",
-		onInit(o) {
-			n = o, i = o.locale ?? W;
-			let s = o.editorEl, l = o.containerEl?.querySelector(".oe-toolbar");
-			if (!l) return;
+		onInit(a) {
+			n = a, i = a.locale ?? W;
+			let s = a.editorEl, c = a.containerEl?.querySelector(".oe-toolbar");
+			if (!c) return;
 			document.addEventListener("selectionchange", () => {
 				let e = window.getSelection();
 				e && e.rangeCount > 0 && s.contains(e.anchorNode) && (r = e.getRangeAt(0).cloneRange());
@@ -2554,11 +2579,11 @@ function rt() {
 			u.type = "button", u.className = "oe-toolbar-btn", u.title = i.plugins.emoji.buttonTitle, u.innerHTML = nt, t = u, u.addEventListener("mousedown", (t) => {
 				t.preventDefault();
 				let n = window.getSelection();
-				n && n.rangeCount > 0 && s.contains(n.anchorNode) && (r = n.getRangeAt(0).cloneRange()), e ? a() : c(u);
-			}), l.appendChild(u);
+				n && n.rangeCount > 0 && s.contains(n.anchorNode) && (r = n.getRangeAt(0).cloneRange()), e ? o() : l(u);
+			}), c.appendChild(u);
 		},
 		onDestroy() {
-			a(), n = null, r = null;
+			o(), n = null, r = null;
 		}
 	};
 }
