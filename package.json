@@ -1,6 +1,6 @@
 {
   "name": "open-edit",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Lightweight, embeddable WYSIWYG HTML editor. Zero dependencies, plugin system, clean HTML5 output.",
   "license": "MIT",
   "type": "module",
