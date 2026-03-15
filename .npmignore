@@ -1,0 +1,22 @@
+# Development & internal files — excluded from npm package
+research/
+designs/
+.github/
+node_modules/
+
+# Internal docs (not relevant for library consumers)
+CLAUDE.md
+PRODUCT.md
+CHANGELOG.md
+
+# Test file (no build step needed by consumers)
+test.html
+
+# Config files
+.eslintrc*
+tsconfig*.json
+vite.config.ts
+
+# Misc
+*.map
+.DS_Store
