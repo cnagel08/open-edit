@@ -536,6 +536,9 @@ export function Editor({ onChange }: { onChange: (html: string) => void }) {
 
 > **Note:** The guard `|| editorRef.current` prevents double-initialisation in React 18 Strict Mode, which intentionally mounts effects twice in development.
 
+For a more robust, controlled component implementation supporting props like `value`, `theme`, and `placeholder`, check out the [React Integration Example](examples/ReactExample.tsx).
+
+
 ### Vue 3
 
 ```vue
